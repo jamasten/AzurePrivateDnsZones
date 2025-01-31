@@ -1,0 +1,157 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.33.93.31351",
+      "templateHash": "13678167223011852396"
+    }
+  },
+  "parameters": {
+    "deployIdentity": {
+      "type": "bool"
+    },
+    "deploymentNameSuffix": {
+      "type": "string"
+    },
+    "hubVirtualNetworkResourceId": {
+      "type": "string"
+    },
+    "identityVirtualNetworkResourceId": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "copy": [
+      {
+        "name": "privateDnsZoneNames_Backup",
+        "count": "[length(items(variables('locations')))]",
+        "input": "[format('privatelink.{0}.backup.windowsazure.{1}', items(variables('locations'))[copyIndex('privateDnsZoneNames_Backup')].value.recoveryServicesGeo, coalesce(variables('privateDnsZoneSuffixes_Backup')[environment().name], variables('cloudSuffix')))]"
+      }
+    ],
+    "cloudSuffix": "[replace(replace(environment().resourceManager, 'https://management.', ''), '/', '')]",
+    "locations": "[createObject('AzureCloud', createObject('centralus', createObject('abbreviation', 'usc', 'recoveryServicesGeo', 'cus', 'timeDifference', '-6:00', 'timeZone', 'Central Standard Time'), 'eastus', createObject('abbreviation', 'use', 'recoveryServicesGeo', 'eus', 'timeDifference', '-5:00', 'timeZone', 'Eastern Standard Time'), 'eastus2', createObject('abbreviation', 'use2', 'recoveryServicesGeo', 'eus2', 'timeDifference', '-5:00', 'timeZone', 'Eastern Standard Time'), 'northcentralus', createObject('abbreviation', 'usnc', 'recoveryServicesGeo', 'ncus', 'timeDifference', '-6:00', 'timeZone', 'Central Standard Time'), 'southcentralus', createObject('abbreviation', 'ussc', 'recoveryServicesGeo', 'scus', 'timeDifference', '-6:00', 'timeZone', 'Central Standard Time'), 'westcentralus', createObject('abbreviation', 'uswc', 'recoveryServicesGeo', 'wcus', 'timeDifference', '-7:00', 'timeZone', 'Mountain Standard Time'), 'westus', createObject('abbreviation', 'usw', 'recoveryServicesGeo', 'wus', 'timeDifference', '-8:00', 'timeZone', 'Pacific Standard Time'), 'westus2', createObject('abbreviation', 'usw2', 'recoveryServicesGeo', 'wus2', 'timeDifference', '-8:00', 'timeZone', 'Pacific Standard Time'), 'westus3', createObject('abbreviation', 'usw3', 'recoveryServicesGeo', 'wus3', 'timeDifference', '-7:00', 'timeZone', 'Mountain Standard Time')), 'AzureUSGovernment', createObject('usdodcentral', createObject('abbreviation', 'dodc', 'recoveryServicesGeo', 'udc', 'timeDifference', '-6:00', 'timeZone', 'Central Standard Time'), 'usdodeast', createObject('abbreviation', 'dode', 'recoveryServicesGeo', 'ude', 'timeDifference', '-5:00', 'timeZone', 'Eastern Standard Time'), 'usgovarizona', createObject('abbreviation', 'az', 'recoveryServicesGeo', 'uga', 'timeDifference', '-7:00', 'timeZone', 'Mountain Standard Time'), 'usgovtexas', createObject('abbreviation', 'tx', 'recoveryServicesGeo', 'ugt', 'timeDifference', '-6:00', 'timeZone', 'Central Standard Time'), 'usgovvirginia', createObject('abbreviation', 'va', 'recoveryServicesGeo', 'ugv', 'timeDifference', '-5:00', 'timeZone', 'Eastern Standard Time')), 'USNat', createObject('usnateast', createObject('abbreviation', 'east', 'recoveryServicesGeo', 'exe', 'timeDifference', '-5:00', 'timeZone', 'Eastern Standard Time'), 'usnatwest', createObject('abbreviation', 'west', 'recoveryServicesGeo', 'exw', 'timeDifference', '-8:00', 'timeZone', 'Pacific Standard Time')), 'USSec', createObject('usseceast', createObject('abbreviation', 'east', 'recoveryServicesGeo', 'rxe', 'timeDifference', '-5:00', 'timeZone', 'Eastern Standard Time'), 'ussecwest', createObject('abbreviation', 'west', 'recoveryServicesGeo', 'rxw', 'timeDifference', '-8:00', 'timeZone', 'Pacific Standard Time')))[environment().name]]",
+    "privateDnsZoneNames": "[union(createArray(format('privatelink.agentsvc.azure-automation.{0}', coalesce(variables('privateDnsZoneSuffixes_AzureAutomation')[environment().name], variables('cloudSuffix'))), format('privatelink.azure-automation.{0}', coalesce(variables('privateDnsZoneSuffixes_AzureAutomation')[environment().name], variables('cloudSuffix'))), format('privatelink.{0}', coalesce(variables('privateDnsZoneSuffixes_AzureWebSites')[environment().name], format('appservice.{0}', variables('cloudSuffix')))), format('scm.privatelink.{0}', coalesce(variables('privateDnsZoneSuffixes_AzureWebSites')[environment().name], format('appservice.{0}', variables('cloudSuffix')))), format('privatelink.wvd.{0}', coalesce(variables('privateDnsZoneSuffixes_AzureVirtualDesktop')[environment().name], variables('cloudSuffix'))), format('privatelink-global.wvd.{0}', coalesce(variables('privateDnsZoneSuffixes_AzureVirtualDesktop')[environment().name], variables('cloudSuffix'))), format('privatelink.file.{0}', environment().suffixes.storage), format('privatelink.queue.{0}', environment().suffixes.storage), format('privatelink.table.{0}', environment().suffixes.storage), format('privatelink.blob.{0}', environment().suffixes.storage), format('privatelink{0}', replace(environment().suffixes.keyvaultDns, 'vault', 'vaultcore')), format('privatelink.monitor.{0}', coalesce(variables('privateDnsZoneSuffixes_Monitor')[environment().name], variables('cloudSuffix'))), format('privatelink.ods.opinsights.{0}', coalesce(variables('privateDnsZoneSuffixes_Monitor')[environment().name], variables('cloudSuffix'))), format('privatelink.oms.opinsights.{0}', coalesce(variables('privateDnsZoneSuffixes_Monitor')[environment().name], variables('cloudSuffix')))), variables('privateDnsZoneNames_Backup'))]",
+    "privateDnsZoneSuffixes_AzureAutomation": {
+      "AzureCloud": "net",
+      "AzureUSGovernment": "us",
+      "USNat": null,
+      "USSec": null
+    },
+    "privateDnsZoneSuffixes_AzureVirtualDesktop": {
+      "AzureCloud": "microsoft.com",
+      "AzureUSGovernment": "azure.us",
+      "USNat": null,
+      "USSec": null
+    },
+    "privateDnsZoneSuffixes_AzureWebSites": {
+      "AzureCloud": "azurewebsites.net",
+      "AzureUSGovernment": "azurewebsites.us",
+      "USNat": null,
+      "USSec": null
+    },
+    "privateDnsZoneSuffixes_Backup": {
+      "AzureCloud": "com",
+      "AzureUSGovernment": "us",
+      "USNat": null,
+      "USSec": null
+    },
+    "privateDnsZoneSuffixes_Monitor": {
+      "AzureCloud": "azure.com",
+      "AzureUSGovernment": "azure.us",
+      "USNat": null,
+      "USSec": null
+    },
+    "virtualNetworks": "[union(createArray(createObject('name', split(parameters('hubVirtualNetworkResourceId'), '/')[8], 'resourceGroupName', split(parameters('hubVirtualNetworkResourceId'), '/')[4], 'subscriptionId', split(parameters('hubVirtualNetworkResourceId'), '/')[2])), if(parameters('deployIdentity'), createArray(createObject('name', split(parameters('identityVirtualNetworkResourceId'), '/')[8], 'resourceGroupName', split(parameters('identityVirtualNetworkResourceId'), '/')[4], 'subscriptionId', split(parameters('identityVirtualNetworkResourceId'), '/')[2])), createArray()))]"
+  },
+  "resources": [
+    {
+      "copy": {
+        "name": "privateDnsZones",
+        "count": "[length(variables('privateDnsZoneNames'))]"
+      },
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2018-09-01",
+      "name": "[variables('privateDnsZoneNames')[copyIndex()]]",
+      "location": "global"
+    },
+    {
+      "copy": {
+        "name": "virtualNetworkLinks",
+        "count": "[length(variables('virtualNetworks'))]",
+        "mode": "serial",
+        "batchSize": 1
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('deploy-virtual-network-links-{0}-{1}', copyIndex(), parameters('deploymentNameSuffix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "privateDnsZoneNames": {
+            "value": "[variables('privateDnsZoneNames')]"
+          },
+          "virtualNetworkName": {
+            "value": "[variables('virtualNetworks')[copyIndex()].name]"
+          },
+          "virtualNetworkResourceGroupName": {
+            "value": "[variables('virtualNetworks')[copyIndex()].resourceGroupName]"
+          },
+          "virtualNetworkSubscriptionId": {
+            "value": "[variables('virtualNetworks')[copyIndex()].subscriptionId]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.33.93.31351",
+              "templateHash": "12315209925175936164"
+            }
+          },
+          "parameters": {
+            "privateDnsZoneNames": {
+              "type": "array"
+            },
+            "virtualNetworkName": {
+              "type": "string"
+            },
+            "virtualNetworkResourceGroupName": {
+              "type": "string"
+            },
+            "virtualNetworkSubscriptionId": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "copy": {
+                "name": "virtualNetworkLinks",
+                "count": "[length(parameters('privateDnsZoneNames'))]"
+              },
+              "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+              "apiVersion": "2018-09-01",
+              "name": "[format('{0}/{1}', parameters('privateDnsZoneNames')[copyIndex()], parameters('virtualNetworkName'))]",
+              "location": "global",
+              "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                  "id": "[resourceId(parameters('virtualNetworkSubscriptionId'), parameters('virtualNetworkResourceGroupName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "privateDnsZones"
+      ]
+    }
+  ]
+}
