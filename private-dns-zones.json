@@ -13,13 +13,15 @@
       "type": "bool"
     },
     "deploymentNameSuffix": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "[utcNow()]"
     },
     "hubVirtualNetworkResourceId": {
       "type": "string"
     },
     "identityVirtualNetworkResourceId": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": ""
     }
   },
   "variables": {
